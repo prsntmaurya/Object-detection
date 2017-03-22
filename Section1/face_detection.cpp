@@ -28,6 +28,11 @@ int main( int argc, const char** argv )
         printf("--(!)Error loading face cascade\n"); return -1; 
     }
 
+    if( !eyes_cascade.load( eyes_cascade_name ) )
+    { 
+        printf("--(!)Error loading face cascade\n"); return -1; 
+    }
+
     detect_faces( img );
     return 0;
 }
@@ -45,10 +50,23 @@ void detect_faces( Mat img )
     {   
         /*Drawing circle around faces*/ 
         Point center( faces[i].x + faces[i].width/2, faces[i].y + faces[i].height/2 );
-        ellipse( img, center, Size( faces[i].width/2, faces[i].height/2 ), 0, 0, 360, Scalar( 255, 0, 255 ), 4, 8, 0 );
+        ellipse( img, center, Size( faces[i].width/2, faces[i].height/2 ), 0, 0, 360, Scalar( 0, 0, 255 ), 4, 8, 0 );
+        Mat faceROI = img_gray( faces[i] );
+        std::vector<Rect> eyes;
+
+        /*Detect eyes in detected faces*/
+        eyes_cascade.detectMultiScale( faceROI, eyes, 1.1, 2, 0 |CASCADE_SCALE_IMAGE, Size(30, 30) );
+
+        /*for each detected eyes draw a circle around it*/
+        for ( size_t j = 0; j < eyes.size(); j++ )
+        {   
+            Point eye_center( faces[i].x + eyes[j].x + eyes[j].width/2, faces[i].y + eyes[j].y + eyes[j].height/2 );
+            int radius = cvRound( (eyes[j].width + eyes[j].height)/4 );
+            circle( img, eye_center, radius, Scalar( 255, 255, 0 ), 4, 8, 0 );
+        }
     }
     /*showing output image*/
-    namedWindow( "Detected faces", WINDOW_AUTOSIZE );
-    imshow( "Detected faces", img );
+    namedWindow( "Detected faces and eyes", WINDOW_AUTOSIZE );
+    imshow( "Detected faces and eyes", img );
     waitKey(0);
 }    
