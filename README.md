@@ -11,5 +11,5 @@ $ g++ -ggdb `pkg-config --cflags opencv` -o `basename face_detection.cpp .cpp` f
 
 Command to run code face_detection.cpp:
 ```sh
-./face_detection
+./face_detection oscarSelfie.jpg
 ```
