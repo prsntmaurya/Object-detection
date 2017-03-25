@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
                 int i = 0;
                 for (vector<KeyPoint>::iterator k = keyImg.begin(); k != keyImg.end(); ++k, ++i)
                 {
-
+                    circle(img, k->pt, (int)k->size, Scalar( 255, 255, 0 ));
                     putText(img, "x", points[i], FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,255), 1);
                 }
                 cout<< i<< endl;
