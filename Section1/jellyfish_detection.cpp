@@ -11,18 +11,19 @@ int main(int argc, char *argv[])
 {
     vector<String> fileName;
     Mat img(800, 800, CV_8UC1);
+    /*give input image name from commandline or default image is set to jellyfish.jpg*/
     cv::CommandLineParser parser(argc, argv, "{@input |../data/jellyfish.jpg| }");
-
     fileName.push_back(parser.get<string>("@input"));
-    img = imread(fileName[0], IMREAD_COLOR);
+    img = imread(fileName[0], IMREAD_COLOR); /*reading image file*/
     if (img.rows*img.cols <= 0)
     {
         cout << "Image " << fileName[0] << " is empty or cannot be found\n";
         return(0);
     }
 
+    /*using bolb detecter to detect jellyfish*/
     SimpleBlobDetector::Params pDefaultBLOB;
-    // This is default parameters for SimpleBlobDetector
+    /*parameters for SimpleBlobDetector*/   
     pDefaultBLOB.thresholdStep = 10;
     pDefaultBLOB.minThreshold = 10;
     pDefaultBLOB.maxThreshold = 220;
@@ -42,24 +43,22 @@ int main(int argc, char *argv[])
     pDefaultBLOB.filterByConvexity = false;
     pDefaultBLOB.minConvexity = 0.95f;
     pDefaultBLOB.maxConvexity = (float)1e37;
-    // Descriptor array for BLOB
-    vector<String> typeDesc;
-    // Param array for BLOB
-    vector<SimpleBlobDetector::Params> pBLOB;
-    vector<SimpleBlobDetector::Params>::iterator itBLOB;
+    
+    vector<String> typeDesc;      /*Descriptor array for BLOB*/
+    vector<SimpleBlobDetector::Params> pBLOB;       /*Param array for BLOB*/
+    vector<SimpleBlobDetector::Params>::iterator itBLOB;  /*iterator for  blob*/
 
-    // Param for second BLOB detector we want area between 500 and 2900 pixels
+    /*parameter for blob detection using min and max area concept*/
     typeDesc.push_back("BLOB");
     pBLOB.push_back(pDefaultBLOB);
     pBLOB.back().filterByArea = true;
-    pBLOB.back().minArea = 500;
-    pBLOB.back().maxArea = 2900;
+    pBLOB.back().minArea = 160;   /*setting minimum area for homagenity detection*/
+    pBLOB.back().maxArea = 800;     /*setting maximum area for homagenity detection*/
     
 
     itBLOB = pBLOB.begin();
     vector<double> desMethCmp;
     Ptr<Feature2D> b;
-    String label;
     int count=0;
     // Descriptor loop
     vector<String>::iterator itDesc;
@@ -71,33 +70,33 @@ int main(int argc, char *argv[])
             b = SimpleBlobDetector::create(*itBLOB);
             ++itBLOB;
         }
-        try
+        /*try catch block is used to catch unhandled exceptions in Descriptor*/
+        try     
         {
-            vector<KeyPoint>  keyImg;
-            vector<Rect>  zone;
-            vector<vector <Point> >  region;
-            vector<Point2f> points;
+            vector<KeyPoint>  keyImg;  /*vector to store keypoints here center of jellyfish in image*/
+            /*convert keypoints vector to Point2f conversion to store x,y coordinates of KeyPoint for plotting purpose*/
+            vector<Point2f> points;    
 
-            Mat     desc, result(img.rows, img.cols, CV_8UC3);
             if (b.dynamicCast<SimpleBlobDetector>() != NULL)
             {
                 Ptr<SimpleBlobDetector> sbd = b.dynamicCast<SimpleBlobDetector>();
-                sbd->detect(img, keyImg, Mat());
+                sbd->detect(img, keyImg, Mat()); /*detection of keypoints and storing it in keyImg*/
                 for (vector<KeyPoint>::iterator k = keyImg.begin(); k != keyImg.end(); k++)
                     {   
-                        points.push_back(k->pt);
+                        points.push_back(k->pt);  /*conversion of keypoints vector to Point2f*/
                     }
                 Mat pointmatrix(points);;
-                int i = 0;
+
                 for (vector<KeyPoint>::iterator k = keyImg.begin(); k != keyImg.end(); ++k, ++i)
                 {
+                    /*draw circle around detected jellyfish*/
                     circle(img, k->pt, (int)k->size, Scalar( 255, 255, 0 ));
-                    putText(img, "x", points[i], FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,255), 1);
+                    /*printing "x" at the centroid of jellyfish*/
+                    putText(img, "x", points[i], FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,255), 2);
                 }
-                cout<< i<< endl;
             }
-            namedWindow("Detected jellyfish", WINDOW_AUTOSIZE);
-            imshow("Detected jellyfish", img);
+            namedWindow("Detected jellyfish", WINDOW_AUTOSIZE); /*creating new window*/
+            imshow("Detected jellyfish", img);  /*display the resultant image*/
             waitKey();
         }
         catch (Exception& e)
