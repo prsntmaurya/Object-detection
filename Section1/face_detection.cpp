@@ -1,3 +1,7 @@
+/*This code deals with the problem of face detection and eye detection.
+Written by Prashant Maurya.
+The code uses opencv and Haar features based cascade classifier to detect both eyes and face.*/
+
 #include "opencv2/objdetect.hpp"
 #include "opencv2/highgui.hpp"
 #include "opencv2/imgproc.hpp"
@@ -7,7 +11,7 @@ using namespace std;
 using namespace cv;
 
 void detect_faces( Mat img );
-/*loading pretrained CascadeClassifiers*/
+/*loading pretrained Haar CascadeClassifiers*/
 String face_cascade1_name = "haarcascade_frontalface_default.xml";
 String face_cascade2_name = "haarcascade_frontalface_alt.xml";
 String eyes_cascade_name = "haarcascade_eye_tree_eyeglasses.xml";
@@ -25,6 +29,7 @@ int main( int argc, const char** argv )
         return -1;
     }
 
+    /*throwing error when any cascade file is unable to load*/
     if( !face_cascade1.load( face_cascade1_name ) )
     { 
         printf("--(!)Error loading face cascade1\n"); return -1; 
