@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     vector<String> fileName;
     Mat img(800, 800, CV_8UC1);
     /*give input image name from commandline or default image is set to jellyfish.jpg*/
-    cv::CommandLineParser parser(argc, argv, "{@input |../data/jellyfish.jpg| }");
+    cv::CommandLineParser parser(argc, argv, "{@input | jellyfish.jpg| }");
     fileName.push_back(parser.get<string>("@input"));
     img = imread(fileName[0], IMREAD_COLOR); /*reading image file*/
     if (img.rows*img.cols <= 0)
