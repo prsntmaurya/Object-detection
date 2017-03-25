@@ -1,3 +1,15 @@
+/*This code deals with the problem of detecting jelly fishes in the given image 
+and finding the centroid of each detected jelly fishes.
+
+This code is written by Prashant Maurya.
+This code uses blob detection algorithm impelmented in openCV and 
+the default parameters are taken as it is from opencv.
+
+Blob detection algorithm works on detecting the related or 
+homgeneos features based on the 6 context for which it is defined.
+This code deals with blob detection on the basis of bounded area context.
+*/
+
 #include <opencv2/opencv.hpp>
 #include <vector>
 #include <map>
@@ -86,13 +98,13 @@ int main(int argc, char *argv[])
                         points.push_back(k->pt);  /*conversion of keypoints vector to Point2f*/
                     }
                 Mat pointmatrix(points);;
-
+                int i=0;
                 for (vector<KeyPoint>::iterator k = keyImg.begin(); k != keyImg.end(); ++k, ++i)
                 {
                     /*draw circle around detected jellyfish*/
                     circle(img, k->pt, (int)k->size, Scalar( 255, 255, 0 ));
                     /*printing "x" at the centroid of jellyfish*/
-                    putText(img, "x", points[i], FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,255), 2);
+                    putText(img, "x", points[i], FONT_HERSHEY_SIMPLEX, 0.5, Scalar(0,0,255), 1);
                 }
             }
             namedWindow("Detected jellyfish", WINDOW_AUTOSIZE); /*creating new window*/
