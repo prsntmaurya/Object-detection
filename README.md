@@ -27,6 +27,14 @@ This problem code uses Haar features based cascade classifier, which has pre tra
 - for each detected face detect eyes in it
 - display the result
 
+Input Image
+
+![alt text](https://raw.githubusercontent.com/prsntmaurya/Object-detection/master/Section1/oscarSelfie.jpg "Logo Title Text 1")
+
+Output Image
+
+![alt text](https://raw.githubusercontent.com/prsntmaurya/Object-detection/master/results/detectedFaces.png "Logo Title Text 2")
+
 ## Problem 2: Jelly fish detection and its centroid.
 Command to compile code face_detection.cpp:
 ```sh
@@ -47,3 +55,11 @@ Certain parameters needs to be tuned to increase the accuracy of the detection l
 - detecting key points as centroid of jellyfish
 - detecting jellyfish
 - displaying the resultant image
+
+Input Image
+
+![alt text](https://raw.githubusercontent.com/prsntmaurya/Object-detection/master/Section1/jellyfish.jpg "Logo Title Text 1")
+
+Output Image
+
+![alt text](https://raw.githubusercontent.com/prsntmaurya/Object-detection/master/results/jellydetection.png "Logo Title Text 2")
