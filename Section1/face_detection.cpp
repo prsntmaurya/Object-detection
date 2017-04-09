@@ -67,7 +67,7 @@ void detect_faces( Mat img )
         std::vector<Rect> eyes;
 
         /*Detect eyes in detected faces*/
-        eyes_cascade.detectMultiScale( faceROI, eyes, 1.1, 23, 0 |CASCADE_SCALE_IMAGE, Size(30, 30) );
+        eyes_cascade.detectMultiScale( faceROI, eyes, 1.1, 1, 0 |CASCADE_SCALE_IMAGE, Size(30, 30) );
 
         /*for each detected eyes draw a circle around it*/
         for ( size_t j = 0; j < eyes.size(); j++ )
@@ -75,9 +75,6 @@ void detect_faces( Mat img )
             Point eye_center( faces[i].x + eyes[j].x + eyes[j].width/2, faces[i].y + eyes[j].y + eyes[j].height/2 );
             int radius = cvRound( (eyes[j].width + eyes[j].height)/4 );
             circle( img, eye_center, radius, Scalar( 255, 255, 0 ), 4, 8, 0 );
-            cout << "On the centroid of eye-" << j+1 <<" of Ellen DeGeneres the value of B=" <<int(img.at<cv::Vec3b>(center)[0]) << endl;
-            cout << "On the centroid of eye-" << j+1 <<" of Ellen DeGeneres the value of G=" <<int(img.at<cv::Vec3b>(center)[1]) << endl;
-            cout << "On the centroid of eye-" << j+1 <<" of Ellen DeGeneres the value of R=" <<int(img.at<cv::Vec3b>(center)[2]) << endl << endl;
         }
     }
 
@@ -90,6 +87,17 @@ void detect_faces( Mat img )
         ellipse( img, center, Size( faces[i].width/2, faces[i].height/2 ), 0, 0, 360, Scalar( 0, 250, 255 ), 4, 8, 0 );
         Mat faceROI = img_gray( faces[i] );
         std::vector<Rect> eyes;
+
+        /*Detect eyes in detected faces*/
+        eyes_cascade.detectMultiScale( faceROI, eyes, 1.1, 1, 0 |CASCADE_SCALE_IMAGE, Size(30, 30) );
+
+        /*for each detected eyes draw a circle around it*/
+        for ( size_t j = 0; j < eyes.size(); j++ )
+        {   
+            Point eye_center( faces[i].x + eyes[j].x + eyes[j].width/2, faces[i].y + eyes[j].y + eyes[j].height/2 );
+            int radius = cvRound( (eyes[j].width + eyes[j].height)/4 );
+            circle( img, eye_center, radius, Scalar( 255, 255, 0 ), 4, 8, 0 );
+        }
 
     }    
     /*showing output image*/
